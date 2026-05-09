@@ -1,5 +1,5 @@
 {
-  "name": "ghtun",
+  "name": "Sham-VPN",
   "build": {
     "dockerfile": "./Dockerfile",
     "context": "."

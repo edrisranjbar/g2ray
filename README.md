@@ -56,12 +56,7 @@ If these IPs don't work, try different datacenters or ISPs from your region.
 - Ensure you have enough compute hours remaining for the month
 - For network issues, try switching proxy protocols in your client app
 
-## Support the Project
 
-If you find this project useful, consider supporting its development:
-
-- [Buy me a coffee ☕](https://www.buymeacoffee.com/amiremohamadi)
-- Ethereum: `0x5724c38100b2aE3d2547974f46D0f2f49eb2D152`
 
 ## Disclaimer
 

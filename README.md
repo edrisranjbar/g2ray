@@ -6,7 +6,7 @@
 
 **Please read this before using this project:**
 
-This project creates and runs a V2Ray proxy server. While the intention is for legitimate use, **we strongly recommend using a separate GitHub account (not your main account) when forking and running this project**. This is purely a precautionary measure, as there's a possibility it could trigger GitHub's automated security systems or account restrictions. Using an alternative account protects your main GitHub account in case of any unforeseen issues.
+This project creates and runs a V2Ray proxy server. While the intention is for legitimate use, **we strongly recommend using a separate GitHub account (not your main account) when forking and running this project**, as GitHub may restrict accounts that violate its terms of service.
 
 ## Overview
 
@@ -60,12 +60,16 @@ If these IPs don't work, try different datacenters or ISPs from your region.
 
 If you find this project useful, consider supporting its development:
 
-- [Buy me a coffee ☕](https://www.buymeacoffee.com/amiremohamadi)
-- Ethereum: `0x5724c38100b2aE3d2547974f46D0f2f49eb2D152`
+### Cryptocurrency Donations
+- **Bitcoin**: `bc1qdwdpeqv0l8ala8tm46rtfeghuxl70een84npj3`
+- **Ethereum**: `0x695CCF873d51E4C2dC1321b405C63BFE99c5a536`
+- **Solana**: `C2d9u9nY2hZfxsi5Fwz1o5VjGGQujWmxeqZ3upKvHBfD`
+- **TON Coin**: `UQAjStDMoMUusqRAuQGZ0Qbc2Th45yUUMdKlbhQ_6aS2TWlD`
+- [Buy me a coffee ☕](https://www.buymeacoffee.com/amiremohamadi) (donate to the main REPO, he made it happen)
 
 ## Disclaimer
 
-This tool is provided for educational and legitimate use only. Users are responsible for complying with their local laws and regulations regarding proxy usage. The author is not responsible for any misuse or consequences arising from the use of this tool.
+This tool is provided for educational and legitimate use only. Users are responsible for complying with their local laws and regulations regarding proxy usage. The author is not responsible for any misuse or legal consequences arising from the use of this tool.
 
 ## License
 

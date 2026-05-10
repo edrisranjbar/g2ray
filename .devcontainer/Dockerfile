@@ -38,6 +38,8 @@ RUN echo '#!/bin/bash' > /app/startup.sh && \
     echo 'echo ""' >> /app/startup.sh && \
     echo 'echo "✨ Service is running and ready to accept connections..."' >> /app/startup.sh && \
     echo 'echo ""' >> /app/startup.sh && \
+    echo 'echo -e "\n✅ VLESS LINK:\nvless://550e8400-e29b-41d4-a716-446655440000@94.130.50.12:443?encryption=none&security=tls&type=xhttp&mode=packet-up&sni=${CODESPACE_NAME}-443.app.github.dev&path=%2F#ghtun"' >> /app/startup.sh && \
+    echo 'echo ""' >> /app/startup.sh && \
     echo 'exec /usr/local/bin/xray -c /etc/config.json' >> /app/startup.sh && \
     chmod +x /app/startup.sh
 

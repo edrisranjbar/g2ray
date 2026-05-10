@@ -1,5 +1,5 @@
 {
-  "name": "ghtun",
+  "name": "poruiya",
   "build": {
     "dockerfile": "./Dockerfile",
     "context": "."

@@ -21,13 +21,10 @@ generate_uuid() {
 test_server() {
     ip="$1"
     label="$2"
-    # Use curl with short timeout for reliability
-    if timeout 3 curl -sf "https://$ip/" --connect-timeout 2 >/dev/null 2>&1; then
-        echo "✅ $label ($ip) - ONLINE"
-    elif timeout 3 curl -sf "http://$ip/" --connect-timeout 2 >/dev/null 2>&1; then
-        echo "✅ $label ($ip) - ONLINE (HTTP)"
+    if (echo >/dev/tcp/$ip/443) 2>/dev/null; then
+        echo "✅ $label - $ip: OK"
     else
-        echo "❌ $label ($ip) - OFFLINE/TIMEOUT"
+        echo "❌ $label - $ip: BLOCKED"
     fi
 }
 

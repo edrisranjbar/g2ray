@@ -54,8 +54,8 @@ show_status() {
     echo ""
 }
 
-# Run test if --test flag is passed
-if [ "$1" = "--test" ] || [ "$1" = "test" ]; then
+# Check for test command
+if [ "${1:-}" = "test" ]; then
     show_status
     exit 0
 fi

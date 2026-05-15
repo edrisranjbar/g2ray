@@ -106,27 +106,22 @@ def config_to_npv(config: Dict[str, Any], hardware_id: Optional[str] = None) -> 
 
 
 def config_to_npvt(config: Dict[str, Any]) -> str:
-    """Convert config to NPVT format"""
+    """Convert config to NPVT format - plain text key=value"""
     
-    # Build config
-    npvt_config = {
-        "server": config["server"],
-        "port": config["port"],
-        "uuid": config["uuid"],
-        "encryption": config.get("encryption", "none"),
-        "transport": config.get("transport", "ws"),
-        "path": config.get("path", "/"),
-        "tls": config.get("tls", True),
-        "sni": config.get("sni", config["server"]),
-        "remarks": config.get("remarks", "g2ray")
-    }
+    # Format 1: key=value pairs (like properties file)
+    lines = []
+    lines.append(f"protocol=vless")
+    lines.append(f"server={config['server']}")
+    lines.append(f"port={config['port']}")
+    lines.append(f"uuid={config['uuid']}")
+    lines.append(f"encryption={config.get('encryption', 'none')}")
+    lines.append(f"transport={config.get('transport', 'ws')}")
+    lines.append(f"path={config.get('path', '/')}")
+    lines.append(f"tls={config.get('tls', True)}")
+    lines.append(f"sni={config.get('sni', config['server'])}")
+    lines.append(f"remarks={config.get('remarks', 'g2ray')}")
     
-    json_str = json.dumps(npvt_config)
-    # Use URL-safe base64
-    b64_str = base64.urlsafe_b64encode(json_str.encode()).decode().rstrip('=')
-    
-    # Return with NPV signature
-    return "NPV1" + b64_str
+    return '\n'.join(lines)
 
 
 def generate_npv_file(vless_url: str = None, json_file: str = None, 

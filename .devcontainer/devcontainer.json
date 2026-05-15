@@ -1,5 +1,5 @@
 {
-  "name": "ghtun",
+  "name": "@Kakoolnews",
   "build": {
     "dockerfile": "./Dockerfile",
     "context": "."
@@ -14,11 +14,11 @@
   },
   "postAttachCommand": {
     "public": "gh codespace ports visibility 443:public -c $CODESPACE_NAME",
-    "xray": "sudo /usr/local/bin/xray -c /etc/config.json"
+    "xray": "sudo -E /usr/local/bin/entrypoint.sh"
   },
   "portsAttributes": {
     "443": {
-      "label": "xray",
+      "label": "xray-vless",
       "protocol": "http",
       "onAutoForward": "silent"
     }

@@ -1,16 +1,23 @@
 FROM debian:bookworm-slim
 
+LABEL maintainer="@Kakoolnews" \
+      description="VLESS proxy via GitHub Codespaces"
+
 COPY install.sh /app/install.sh
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    bash git curl wget unzip tzdata openssl ca-certificates \
+    bash git curl wget unzip tzdata openssl ca-certificates uuid-runtime \
     && rm -rf /var/lib/apt/lists/*
 
 RUN chmod +x /app/install.sh && /app/install.sh
-COPY config.json /etc/config.json
 
-RUN echo 'echo -e "\n✅ VLESS LINK:\nvless://550e8400-e29b-41d4-a716-446655440000@94.130.50.12:443?encryption=none&security=tls&type=xhttp&mode=packet-up&sni=${CODESPACE_NAME}-443.app.github.dev&path=%2F#ghtun"' >> /etc/bash.bashrc
+COPY config.json /etc/config.template.json
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-CMD ["/usr/local/bin/xray", "-c", "/etc/config.json"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD curl -sf http://localhost:443/ || exit 1
+
+CMD ["/usr/local/bin/entrypoint.sh"]

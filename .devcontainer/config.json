@@ -1,4 +1,8 @@
 {
+  "log": {
+    "loglevel": "warning",
+    "access": "none"
+  },
   "inbounds": [
     {
       "port": 443,
@@ -6,23 +10,40 @@
       "settings": {
         "clients": [
           {
-            "id": "550e8400-e29b-41d4-a716-446655440000"
+            "id": "${UUID}"
           }
         ],
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "xhttp",
-        "xhttpSettings": {
-          "mode": "packet-up",
+        "network": "ws",
+        "wsSettings": {
           "path": "/"
         }
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": ["http", "tls"]
       }
     }
   ],
   "outbounds": [
     {
-      "protocol": "freedom"
+      "protocol": "freedom",
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "block"
     }
-  ]
+  ],
+  "routing": {
+    "rules": [
+      {
+        "type": "field",
+        "outboundTag": "block",
+        "protocol": ["bittorrent"]
+      }
+    ]
+  }
 }

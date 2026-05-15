@@ -106,7 +106,7 @@ def config_to_npv(config: Dict[str, Any], hardware_id: Optional[str] = None) -> 
 
 
 def config_to_npvt(config: Dict[str, Any]) -> str:
-    """Convert config to NPVT format - trying various formats"""
+    """Convert config to NPVT format"""
     
     # Build config
     npvt_config = {
@@ -122,7 +122,8 @@ def config_to_npvt(config: Dict[str, Any]) -> str:
     }
     
     json_str = json.dumps(npvt_config)
-    b64_str = base64.b64encode(json_str.encode()).decode()
+    # Use URL-safe base64
+    b64_str = base64.urlsafe_b64encode(json_str.encode()).decode().rstrip('=')
     
     # Return with NPV signature
     return "NPV1" + b64_str
@@ -215,18 +216,16 @@ if __name__ == "__main__":
                 # For NPV1 format: NPV1{base64}
                 if content.startswith('NPV1'):
                     b64_data = content[4:].strip()
-                    # Decode safely
-                    try:
-                        decoded = json.loads(base64.b64decode(b64_data).decode('utf-8'))
-                    except:
-                        # Try URL-safe base64
-                        import base64
-                        decoded = json.loads(base64.urlsafe_b64decode(b64_data + '==').decode('utf-8'))
-                    
+                    # Add padding for URL-safe base64
+                    padding = 4 - (len(b64_data) % 4)
+                    if padding != 4:
+                        b64_data += '=' * padding
+                    # Decode using URL-safe base64
+                    decoded = json.loads(base64.urlsafe_b64decode(b64_data).decode('utf-8'))
                     decoded['remarks'] = custom_remarks
                     
-                    # Re-encode
-                    encoded = base64.b64encode(json.dumps(decoded).encode('utf-8')).decode('utf-8')
+                    # Re-encode with URL-safe base64
+                    encoded = base64.urlsafe_b64encode(json.dumps(decoded).encode('utf-8')).decode('utf-8').rstrip('=')
                     new_content = "NPV1" + encoded
                     
                     with open(args.output or "config.npv", 'w') as f:

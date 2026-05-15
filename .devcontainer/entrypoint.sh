@@ -11,6 +11,9 @@ generate_uuid() {
     echo "${prefix}-${suffix}"
 }
 
+# Get your VPS IP from env or use default
+SERVER_IP="${SERVER_IP:-localhost}"
+
 UUID="${VLESS_UUID:-$(generate_uuid)}"
 
 sed "s/\${UUID}/$UUID/g" "$CONFIG_TEMPLATE" > "$CONFIG"
@@ -22,13 +25,9 @@ echo "========================================"
 echo "  @Kakoolnews - VLESS Proxy"
 echo "========================================"
 echo ""
-echo "VLESS links (copy & use whichever works):"
+echo "Your VLESS link:"
 echo ""
-echo "vless://${UUID}@94.130.50.12:443?encryption=none&security=tls&type=ws&sni=${SNI}&path=%2F#@kakoolnews"
-echo ""
-echo "vless://${UUID}@63.141.252.203:443?encryption=none&security=tls&type=ws&sni=${SNI}&path=%2F#@kakoolnews"
-echo ""
-echo "vless://${UUID}@50.7.5.83:443?encryption=none&security=tls&type=ws&sni=${SNI}&path=%2F#@kakoolnews"
+echo "vless://${UUID}@${SERVER_IP}:443?encryption=none&security=tls&type=ws&sni=${SNI}&path=%2F#@kakoolnews"
 echo ""
 echo "========================================"
 echo ""

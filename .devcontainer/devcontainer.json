@@ -14,7 +14,7 @@
   },
   "postAttachCommand": {
     "public": "gh codespace ports visibility 443:public -c $CODESPACE_NAME",
-    "xray": "sudo -E /usr/local/bin/entrypoint.sh"
+    "xray": "sudo -E SERVER_IP=YOUR_VPS_IP /usr/local/bin/entrypoint.sh"
   },
   "portsAttributes": {
     "443": {
@@ -26,5 +26,14 @@
   "forwardPorts": [443],
   "hostRequirements": {
     "cpus": 2
+  },
+  "customizations": {
+    "codespaces": {
+      "secrets": {
+        "SERVER_IP": {
+          "description": "Your VPS IP address"
+        }
+      }
+    }
   }
 }

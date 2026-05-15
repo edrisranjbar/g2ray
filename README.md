@@ -84,21 +84,6 @@ Tested with Shecan (free plan). If these IPs are reachable from your network, th
 | Connection timeout | Try a different datacenter or ISP |
 | Port not accessible | Ensure port 443 is set to public visibility |
 
-## Testing Servers
-
-Your users can test which servers are working by running:
-
-```bash
-# Inside the codespace terminal:
-sudo -E /usr/local/bin/entrypoint.sh test
-```
-
-This will check each server and show status:
-- ✅ ONLINE - Server is reachable
-- ❌ OFFLINE/TIMEOUT - Server is down or overloaded
-
-The proxy also auto-tests servers every 30 minutes and prints results to the terminal.
-
 ## Project Structure
 
 ```

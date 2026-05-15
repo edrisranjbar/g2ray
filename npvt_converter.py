@@ -106,22 +106,14 @@ def config_to_npv(config: Dict[str, Any], hardware_id: Optional[str] = None) -> 
 
 
 def config_to_npvt(config: Dict[str, Any]) -> str:
-    """Convert config to NPVT format - plain text key=value"""
+    """Convert config to NPVT format - try different formats"""
     
-    # Format 1: key=value pairs (like properties file)
-    lines = []
-    lines.append(f"protocol=vless")
-    lines.append(f"server={config['server']}")
-    lines.append(f"port={config['port']}")
-    lines.append(f"uuid={config['uuid']}")
-    lines.append(f"encryption={config.get('encryption', 'none')}")
-    lines.append(f"transport={config.get('transport', 'ws')}")
-    lines.append(f"path={config.get('path', '/')}")
-    lines.append(f"tls={config.get('tls', True)}")
-    lines.append(f"sni={config.get('sni', config['server'])}")
-    lines.append(f"remarks={config.get('remarks', 'g2ray')}")
+    # Format 1: Raw vless URL
+    vless_url = f"vless://{config['uuid']}@{config['server']}:{config['port']}?encryption={config.get('encryption', 'none')}&security=tls&type={config.get('transport', 'ws')}&sni={config.get('sni', config['server'])}&path={config.get('path', '/')}"
+    if config.get('remarks'):
+        vless_url += f"#{config['remarks']}"
     
-    return '\n'.join(lines)
+    return vless_url
 
 
 def generate_npv_file(vless_url: str = None, json_file: str = None, 
@@ -176,7 +168,7 @@ if __name__ == "__main__":
         description="Convert VLESS config to NPV/NPVT file format"
     )
     parser.add_argument("--vless", help="Full VLESS URL")
-    parser.add_argument("--text", "--remarks", dest="remarks", help="Custom text/remarks for the config")
+    parser.add_argument("--text", help="Custom text/remarks")
     parser.add_argument("--json", help="Input JSON config file")
     parser.add_argument("--uuid", help="VLESS UUID")
     parser.add_argument("--server", help="Server IP/hostname")
@@ -184,12 +176,13 @@ if __name__ == "__main__":
     parser.add_argument("--sni", help="SNI hostname")
     parser.add_argument("--output", default="config.npv", help="Output file")
     parser.add_argument("--npvt", action="store_true", help="Generate .npvt format")
+    parser.add_argument("--all", action="store_true", help="Generate all formats")
     parser.add_argument("--hardware-id", help="Hardware ID for locking")
     
     args = parser.parse_args()
     
     try:
-        custom_remarks = args.remarks
+        custom_remarks = args.text
         generate_npv_file(
             vless_url=args.vless,
             json_file=args.json,
@@ -201,33 +194,55 @@ if __name__ == "__main__":
             npvt=args.npvt
         )
         
-        # Add custom text if provided
-        if custom_remarks:
-            try:
-                # Read the file
-                with open(args.output or "config.npv", 'r') as f:
-                    content = f.read()
-                
-                # For NPV1 format: NPV1{base64}
-                if content.startswith('NPV1'):
-                    b64_data = content[4:].strip()
-                    # Add padding for URL-safe base64
-                    padding = 4 - (len(b64_data) % 4)
-                    if padding != 4:
-                        b64_data += '=' * padding
-                    # Decode using URL-safe base64
-                    decoded = json.loads(base64.urlsafe_b64decode(b64_data).decode('utf-8'))
-                    decoded['remarks'] = custom_remarks
-                    
-                    # Re-encode with URL-safe base64
-                    encoded = base64.urlsafe_b64encode(json.dumps(decoded).encode('utf-8')).decode('utf-8').rstrip('=')
-                    new_content = "NPV1" + encoded
-                    
-                    with open(args.output or "config.npv", 'w') as f:
-                        f.write(new_content)
-                    print(f"✅ Custom text: {custom_remarks}")
-            except Exception as e:
-                print(f"Note: Could not add text ({e})")
+        # Generate ALL formats for testing
+        if args.all:
+            # Parse from VLESS URL if provided
+            if args.vless:
+                config = parse_vless_url(args.vless)
+                args.uuid = config.get('uuid')
+                args.server = config.get('server')
+                args.sni = config.get('sni')
+            
+            import os
+            base, ext = os.path.splitext(args.output)
+            
+            # Format 1: VLESS URL
+            with open(f"{base}_vless.txt", 'w') as f:
+                url = f"vless://{args.uuid}@{args.server}:{args.port}?encryption=none&security=tls&type=ws&sni={args.sni}&path=%2F#{custom_remarks or 'remarks'}"
+                f.write(url)
+            print(f"✅ Generated: {base}_vless.txt")
+            
+            # Format 2: JSON
+            import json
+            with open(f"{base}_json.json", 'w') as f:
+                json.dump({
+                    "server": args.server,
+                    "port": args.port,
+                    "uuid": args.uuid,
+                    "encryption": "none",
+                    "transport": "ws",
+                    "path": "/",
+                    "tls": True,
+                    "sni": args.sni,
+                    "remarks": custom_remarks or "g2ray"
+                }, f, indent=2)
+            print(f"✅ Generated: {base}_json.json")
+            
+            # Format 3: key=value
+            with open(f"{base}_kv.txt", 'w') as f:
+                f.write(f"protocol=vless\n")
+                f.write(f"server={args.server}\n")
+                f.write(f"port={args.port}\n")
+                f.write(f"uuid={args.uuid}\n")
+                f.write(f"encryption=none\n")
+                f.write(f"transport=ws\n")
+                f.write(f"path=/\n")
+                f.write(f"tls=True\n")
+                f.write(f"sni={args.sni}\n")
+                f.write(f"remarks={custom_remarks or 'g2ray'}\n")
+            print(f"✅ Generated: {base}_kv.txt")
+            
+            print("\n📁 Test all these files in NPV Tunnel!")
                 
     except Exception as e:
         print(f"❌ Error: {e}")

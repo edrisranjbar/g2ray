@@ -106,11 +106,10 @@ def config_to_npv(config: Dict[str, Any], hardware_id: Optional[str] = None) -> 
 
 
 def config_to_npvt(config: Dict[str, Any]) -> str:
-    """Convert config to NPVT format - vless|json format"""
+    """Convert config to NPVT format - trying various formats"""
     
-    # NPV format: vless|JSON
+    # Build config
     npvt_config = {
-        "protocol": "vless",
         "server": config["server"],
         "port": config["port"],
         "uuid": config["uuid"],
@@ -122,9 +121,11 @@ def config_to_npvt(config: Dict[str, Any]) -> str:
         "remarks": config.get("remarks", "g2ray")
     }
     
-    # Format: vless|<JSON>
     json_str = json.dumps(npvt_config)
-    return "vless|" + json_str
+    b64_str = base64.b64encode(json_str.encode()).decode()
+    
+    # Return with NPV signature
+    return "NPV1" + b64_str
 
 
 def generate_npv_file(vless_url: str = None, json_file: str = None, 

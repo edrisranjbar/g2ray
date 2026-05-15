@@ -106,28 +106,25 @@ def config_to_npv(config: Dict[str, Any], hardware_id: Optional[str] = None) -> 
 
 
 def config_to_npvt(config: Dict[str, Any]) -> str:
-    """Convert config to NPVT format (more encrypted style)"""
+    """Convert config to NPVT format - vless|json format"""
     
-    # NPVT format - more compact, likely what NPV Tunnel uses
+    # NPV format: vless|JSON
     npvt_config = {
-        "p": config.get("protocol", "vless").upper(),
-        "s": config["server"],
-        "pt": config["port"],
-        "id": config["uuid"],
-        "enc": config.get("encryption", "none"),
-        "net": config.get("transport", "ws"),
+        "protocol": "vless",
+        "server": config["server"],
+        "port": config["port"],
+        "uuid": config["uuid"],
+        "encryption": config.get("encryption", "none"),
+        "transport": config.get("transport", "ws"),
         "path": config.get("path", "/"),
-        "tls": 1 if config.get("tls", True) else 0,
-        "sn": config.get("sni", config["server"]),
-        "rm": config.get("remarks", "g2ray")
+        "tls": config.get("tls", True),
+        "sni": config.get("sni", config["server"]),
+        "remarks": config.get("remarks", "g2ray")
     }
     
-    # JSON then base64
+    # Format: vless|<JSON>
     json_str = json.dumps(npvt_config)
-    b64_encoded = base64.b64encode(json_str.encode('utf-8')).decode('utf-8')
-    
-    # Simple format
-    return b64_encoded
+    return "vless|" + json_str
 
 
 def generate_npv_file(vless_url: str = None, json_file: str = None, 

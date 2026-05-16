@@ -22,12 +22,12 @@ SNI="${CODESPACE_NAME:-localhost}-443.app.github.dev"
 
 echo ""
 echo "========================================"
-echo "  @Kakoolnews - VLESS Proxy"
+echo "  @KakoolNews - VLESS Proxy"
 echo "========================================"
 echo ""
 echo "Your VLESS link:"
 echo ""
-echo "vless://${UUID}@${SERVER_IP}:443?encryption=none&security=tls&type=ws&sni=${SNI}&path=%2F#@kakoolnews"
+echo "vless://${UUID}@${SERVER_IP}:443?encryption=none&security=tls&type=ws&sni=${SNI}&path=%2F#@KakoolNews"
 echo ""
 echo "Compatible IPs:"
 echo "  - 63.141.252.203"
@@ -41,6 +41,6 @@ echo ""
 XRAY_PID=$!
 
 while kill -0 "$XRAY_PID" 2>/dev/null; do
-    echo "[@Kakoolnews] alive - $(date '+%H:%M:%S')"
+    echo "[@KakoolNews] alive - $(date '+%H:%M:%S')"
     sleep 300
 done

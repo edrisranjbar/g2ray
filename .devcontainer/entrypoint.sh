@@ -12,7 +12,6 @@ generate_config() {
 }
 
 get_usage() {
-    # Get network stats from /proc - total bytes on all interfaces
     if [ -f /proc/net/dev ]; then
         awk '/^ *(eth0|ens|wlan|tun0|wg0)/{sum += $2 + $10} END {printf "%.0f", sum+0}' /proc/net/dev 2>/dev/null || echo "0"
     else
@@ -37,6 +36,11 @@ format_bytes() {
     fi
 }
 
+ping_xray() {
+    # Check if Xray is responding
+    curl -sf -m 2 http://localhost:443/ >/dev/null 2>&1 && echo "OK" || echo "DOWN"
+}
+
 restart_xray() {
     echo "[@KakoolNews] Restarting Xray..."
     if [ -f "$PID_FILE" ]; then
@@ -47,7 +51,9 @@ restart_xray() {
     /usr/local/bin/xray -c "$CONFIG" 2>/dev/null &
     XRAY_PID=$!
     echo "$XRAY_PID" > "$PID_FILE"
-    echo "[@KakoolNews] Xray restarted (PID: $XRAY_PID)"
+    sleep 1
+    status=$(ping_xray)
+    echo "[@KakoolNews] Xray restarted (PID: $XRAY_PID) - $status"
 }
 
 show_stats() {
@@ -90,8 +96,10 @@ show_stats
 /usr/local/bin/xray -c "$CONFIG" 2>/dev/null &
 XRAY_PID=$!
 echo "$XRAY_PID" > "$PID_FILE"
+sleep 2
+status=$(ping_xray)
 
 while kill -0 "$XRAY_PID" 2>/dev/null; do
-    echo "[@KakoolNews] alive - $(date '+%H:%M:%S')"
-    sleep 300
+    echo "[@KakoolNews] $status - $(date '+%H:%M:%S')"
+    sleep 60
 done

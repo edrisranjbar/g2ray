@@ -41,8 +41,10 @@ echo ""
 echo "========================================"
 echo ""
 
-while true; do
-    /usr/local/bin/xray -c "$CONFIG"
-    echo "[@KakoolNews] xray stopped, waiting 5 min then restarting..."
-    sleep 30
+/usr/local/bin/xray -c "$CONFIG" &
+XRAY_PID=$!
+
+while kill -0 "$XRAY_PID" 2>/dev/null; do
+    echo "[@KakoolNews] alive - $(date '+%H:%M:%S')"
+    sleep 300
 done

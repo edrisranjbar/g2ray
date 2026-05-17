@@ -13,14 +13,18 @@ generate_config() {
 get_usage() {
     # Get network stats from /proc - total bytes on all interfaces
     if [ -f /proc/net/dev ]; then
-        awk '/^ *(eth0|ens|wlan|tun0|wg0)/{sum += $2 + $10} END {print sum+0}' /proc/net/dev 2>/dev/null || echo "0"
+        awk '/^ *(eth0|ens|wlan|tun0|wg0)/{sum += $2 + $10} END {printf "%.0f", sum+0}' /proc/net/dev 2>/dev/null || echo "0"
     else
         echo "0"
     fi
 }
 
 format_bytes() {
-    bytes=$1
+    bytes=$(printf "%.0f" "$1" 2>/dev/null)
+    if [ -z "$bytes" ] || [ "$bytes" = "0" ]; then
+        echo "0B"
+        return
+    fi
     if [ "$bytes" -lt 1024 ]; then
         echo "${bytes}B"
     elif [ "$bytes" -lt 1048576 ]; then

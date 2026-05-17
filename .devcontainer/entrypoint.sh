@@ -44,5 +44,5 @@ echo ""
 while true; do
     /usr/local/bin/xray -c "$CONFIG"
     echo "[@KakoolNews] xray stopped, waiting 5 min then restarting..."
-    sleep 300
+    sleep 30
 done

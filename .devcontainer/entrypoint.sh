@@ -3,6 +3,7 @@ set -eu
 
 CONFIG_TEMPLATE="/etc/config.template.json"
 CONFIG="/etc/config.json"
+PID_FILE="/tmp/xray.pid"
 
 UUID="${VLESS_UUID:-0efb1a4a-0513-471c-b762-bd66a336044c}"
 
@@ -38,14 +39,15 @@ format_bytes() {
 
 restart_xray() {
     echo "[@KakoolNews] Restarting Xray..."
-    if [ -n "$XRAY_PID" ] && kill -0 "$XRAY_PID" 2>/dev/null; then
-        kill "$XRAY_PID" 2>/dev/null || true
+    if [ -f "$PID_FILE" ]; then
+        kill $(cat "$PID_FILE") 2>/dev/null || true
         sleep 1
     fi
     generate_config
-    /usr/local/bin/xray -c "$CONFIG" &
+    /usr/local/bin/xray -c "$CONFIG" 2>/dev/null &
     XRAY_PID=$!
-    echo "[@KakoolNews] Xray restarted"
+    echo "$XRAY_PID" > "$PID_FILE"
+    echo "[@KakoolNews] Xray restarted (PID: $XRAY_PID)"
 }
 
 show_stats() {
@@ -85,8 +87,9 @@ generate_config
 
 show_stats
 
-/usr/local/bin/xray -c "$CONFIG" &
+/usr/local/bin/xray -c "$CONFIG" 2>/dev/null &
 XRAY_PID=$!
+echo "$XRAY_PID" > "$PID_FILE"
 
 while kill -0 "$XRAY_PID" 2>/dev/null; do
     echo "[@KakoolNews] alive - $(date '+%H:%M:%S')"

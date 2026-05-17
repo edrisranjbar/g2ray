@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eu
+# Don't exit on error - keep running even if some commands fail
 
 CONFIG_TEMPLATE="/etc/config.template.json"
 CONFIG="/etc/config.json"
@@ -36,11 +36,6 @@ format_bytes() {
     fi
 }
 
-ping_xray() {
-    # Check if Xray is responding
-    curl -sf -m 2 http://localhost:443/ >/dev/null 2>&1 && echo "OK" || echo "DOWN"
-}
-
 restart_xray() {
     echo "[@KakoolNews] Restarting Xray..."
     if [ -f "$PID_FILE" ]; then
@@ -51,9 +46,7 @@ restart_xray() {
     /usr/local/bin/xray -c "$CONFIG" 2>/dev/null &
     XRAY_PID=$!
     echo "$XRAY_PID" > "$PID_FILE"
-    sleep 1
-    status=$(ping_xray)
-    echo "[@KakoolNews] Xray restarted (PID: $XRAY_PID) - $status"
+    echo "[@KakoolNews] Xray restarted (PID: $XRAY_PID)"
 }
 
 show_stats() {
@@ -96,10 +89,8 @@ show_stats
 /usr/local/bin/xray -c "$CONFIG" 2>/dev/null &
 XRAY_PID=$!
 echo "$XRAY_PID" > "$PID_FILE"
-sleep 2
-status=$(ping_xray)
 
 while kill -0 "$XRAY_PID" 2>/dev/null; do
-    echo "[@KakoolNews] $status - $(date '+%H:%M:%S')"
-    sleep 60
+    echo "[@KakoolNews] alive - $(date '+%H:%M:%S')"
+    sleep 300
 done

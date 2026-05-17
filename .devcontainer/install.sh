@@ -3,6 +3,12 @@ set -eu
 
 XRAY_DIR="/usr/local/bin"
 
+# Skip if already installed
+if [ -x "$XRAY_DIR/xray" ]; then
+    echo "Xray already installed."
+    exit 0
+fi
+
 detect_arch() {
     arch="$(uname -m)"
     case "$arch" in
@@ -14,12 +20,21 @@ detect_arch() {
 }
 
 fetch_latest_version() {
+    # Try cached version first
+    if [ -f /tmp/xray_version ]; then
+        version=$(cat /tmp/xray_version)
+        if [ -n "$version" ]; then
+            echo "$version"
+            return
+        fi
+    fi
     version=$(wget -qO- "https://api.github.com/repos/XTLS/Xray-core/releases/latest" \
         | grep '"tag_name"' | head -1 | sed 's/.*"tag_name": *"//;s/".*//')
     if [ -z "$version" ]; then
         echo "Failed to fetch latest Xray version" >&2
         exit 1
     fi
+    echo "$version" > /tmp/xray_version
     echo "$version"
 }
 

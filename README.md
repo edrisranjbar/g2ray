@@ -8,7 +8,7 @@
 
 ## Features
 
-- **Auto-generated UUID** — each Codespace session gets a unique identity (no hardcoded credentials)
+- **Fixed UUID** — consistent identity across all sessions (no hardcoded credentials)
 - **Latest Xray** — automatically fetches the newest stable Xray-core release at build time
 - **Multi-architecture** — supports amd64, arm64, and armv7
 - **Traffic sniffing** — detects HTTP/TLS for smarter routing

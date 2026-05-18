@@ -17,6 +17,7 @@ SNI="${CODESPACE_NAME:-localhost}-443.app.github.dev"
 IP1="50.7.5.83"
 IP2="94.130.50.12"
 IP3="63.141.252.203"
+IP4="204.12.196.34"
 
 get_usage() {
     if [ -f /proc/net/dev ]; then
@@ -63,6 +64,8 @@ echo ""
 echo "vless://${UUID}@${IP2}:443?encryption=none&security=tls&sni=${SNI}&insecure=0&allowInsecure=0&type=ws&path=%2F#%40KakoolNews"
 echo ""
 echo "vless://${UUID}@${IP3}:443?encryption=none&security=tls&sni=${SNI}&insecure=0&allowInsecure=0&type=ws&path=%2F#%40KakoolNews"
+echo ""
+echo "vless://${UUID}@${IP4}:443?encryption=none&security=tls&sni=${SNI}&insecure=0&allowInsecure=0&type=ws&path=%2F#%40KakoolNews"
 echo ""
 echo "========================================"
 echo "Data: $(format_bytes $(get_usage))"

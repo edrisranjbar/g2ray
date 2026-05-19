@@ -49,7 +49,7 @@ The proxy configuration is in `.devcontainer/config.json`. Key settings:
 
 | Setting | Value | Description |
 |---------|-------|-------------|
-| Port | 80 | Inbound VLESS port |
+| Port | 443 | Inbound VLESS port |
 | Protocol | VLESS | Proxy protocol |
 | Transport | WebSocket | Stream transport type |
 | Path | / | WebSocket path |
@@ -90,7 +90,7 @@ All 42 compatible server IPs are automatically printed when starting the Codespa
 | Codespace fails to start | Delete it and create a new one |
 | No VLESS link shown | Check the terminal output for errors |
 | Connection timeout | Try a different datacenter or ISP |
-| Port not accessible | Ensure port 80 is set to public visibility |
+| Port not accessible | Ensure port 443 is set to public visibility |
 
 ## Project Structure
 

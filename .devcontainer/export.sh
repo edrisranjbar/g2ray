@@ -9,7 +9,7 @@ OUTPUT_DIR="/workspaces/g2ray/.devcontainer/output"
 
 # Default values
 SERVER_IP="${SERVER_IP:-localhost}"
-SERVER_PORT="${SERVER_PORT:-443}"
+SERVER_PORT="${SERVER_PORT:-80}"
 CODESPACE_NAME="${CODESPACE_NAME:-localhost}"
 
 generate_uuid() {
@@ -20,7 +20,7 @@ generate_uuid() {
 
 export_config() {
     UUID="${VLESS_UUID:-$(generate_uuid)}"
-    SNI="${CODESPACE_NAME:-localhost}-443.app.github.dev"
+    SNI="${CODESPACE_NAME:-localhost}-80.app.github.dev"
     
     mkdir -p "$OUTPUT_DIR"
     

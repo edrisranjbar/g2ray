@@ -49,7 +49,7 @@ The proxy configuration is in `.devcontainer/config.json`. Key settings:
 
 | Setting | Value | Description |
 |---------|-------|-------------|
-| Port | 443 | Inbound VLESS port |
+| Port | 80 | Inbound VLESS port |
 | Protocol | VLESS | Proxy protocol |
 | Transport | WebSocket | Stream transport type |
 | Path | / | WebSocket path |
@@ -71,9 +71,17 @@ GitHub provides **120 free core-hours/month**:
 
 Tested with Shecan (free plan). If these IPs are reachable from your network, the proxy should work:
 
-- `63.141.252.203`
-- `50.7.5.83`
-- `94.130.50.12`
+- `50.7.5.83`, `50.7.87.2`, `50.7.87.3`, `50.7.87.4`, `50.7.87.5`
+- `75.2.60.5`, `144.76.1.88`, `104.21.33.34`, `188.114.98.0`, `188.114.99.0`
+- `3.162.247.34`, `3.162.247.38`, `3.162.247.45`, `3.162.247.77`, `3.33.186.135`
+- `63.176.8.218`, `85.10.207.48`, `94.130.33.41`, `95.216.69.37`, `104.198.14.52`
+- `104.21.63.202`, `15.197.167.90`, `172.67.150.14`, `204.12.196.34`, `35.157.26.135`
+- `52.222.214.38`, `52.222.214.99`, `54.232.119.62`, `65.109.34.234`, `94.130.70.160`
+- `138.201.54.122`, `142.54.178.211`, `172.67.158.128`, `184.171.110.10`
+- `52.222.214.108`, `52.222.214.124`, `63.141.252.203`
+- `94.130.13.19`, `94.130.50.12`, `82.39.133.108`, `185.219.132.82`, `146.185.214.12`
+
+All 42 compatible server IPs are automatically printed when starting the Codespace.
 
 ## Troubleshooting
 
@@ -82,7 +90,7 @@ Tested with Shecan (free plan). If these IPs are reachable from your network, th
 | Codespace fails to start | Delete it and create a new one |
 | No VLESS link shown | Check the terminal output for errors |
 | Connection timeout | Try a different datacenter or ISP |
-| Port not accessible | Ensure port 443 is set to public visibility |
+| Port not accessible | Ensure port 80 is set to public visibility |
 
 ## Project Structure
 

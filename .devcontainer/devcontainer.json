@@ -13,17 +13,17 @@
     }
   },
   "postAttachCommand": {
-    "public": "gh codespace ports visibility 443:public -c $CODESPACE_NAME",
+    "public": "gh codespace ports visibility 80:public -c $CODESPACE_NAME",
     "xray": "sudo -E SERVER_IP=YOUR_VPS_IP /usr/local/bin/entrypoint.sh"
   },
   "portsAttributes": {
-    "443": {
+    "80": {
       "label": "xray-vless",
       "protocol": "http",
       "onAutoForward": "silent"
     }
   },
-  "forwardPorts": [443],
+  "forwardPorts": [80],
   "hostRequirements": {
     "cpus": 1
   },
